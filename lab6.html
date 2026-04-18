@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Lab 6</title>
+</head>
+<body>
+
+<h2>Like or Dislike</h2>
+
+<button onclick="like()">👍</button>
+<span id="like">0</span>
+
+<button onclick="dislike()">👎</button>
+<span id="dislike">0</span>
+
+<br><br>
+
+<textarea id="comment" placeholder="Write comment"></textarea><br>
+<button onclick="addComment()">Submit</button>
+
+<div id="comments"></div>
+
+<br>
+<button onclick="resetAll()">Reset</button>
+
+<script>
+
+// counters
+let likeCount = 0;
+let dislikeCount = 0;
+let comments = [];
+
+// load from cookies
+if (document.cookie.includes("like=")) {
+    likeCount = Number(getCookie("like"));
+    document.getElementById("like").innerText = likeCount;
+}
+
+if (document.cookie.includes("dislike=")) {
+    dislikeCount = Number(getCookie("dislike"));
+    document.getElementById("dislike").innerText = dislikeCount;
+}
+
+if (document.cookie.includes("comments=")) {
+    comments = JSON.parse(getCookie("comments"));
+    showComments();
+}
+
+// like
+function like() {
+    if (getCookie("voted")) {
+        alert("You already voted");
+        return;
+    }
+
+    likeCount++;
+    document.getElementById("like").innerText = likeCount;
+
+    document.cookie = "like=" + likeCount;
+    document.cookie = "voted=yes";
+}
+
+// dislike
+function dislike() {
+    if (getCookie("voted")) {
+        alert("You already voted");
+        return;
+    }
+
+    dislikeCount++;
+    document.getElementById("dislike").innerText = dislikeCount;
+
+    document.cookie = "dislike=" + dislikeCount;
+    document.cookie = "voted=yes";
+}
+
+// add comment
+function addComment() {
+    if (getCookie("commented")) {
+        alert("You already commented");
+        return;
+    }
+
+    let text = document.getElementById("comment").value;
+
+    if (text == "") return;
+
+    comments.push(text);
+    document.cookie = "comments=" + JSON.stringify(comments);
+    document.cookie = "commented=yes";
+
+    showComments();
+}
+
+// show comments
+function showComments() {
+    let div = document.getElementById("comments");
+    div.innerHTML = "";
+
+    for (let i = 0; i < comments.length; i++) {
+        div.innerHTML += "<p>" + comments[i] + "</p>";
+    }
+}
+
+// reset
+function resetAll() {
+    document.cookie = "like=0";
+    document.cookie = "dislike=0";
+    document.cookie = "comments=[]";
+    document.cookie = "voted=";
+    document.cookie = "commented=";
+
+    likeCount = 0;
+    dislikeCount = 0;
+    comments = [];
+
+    document.getElementById("like").innerText = 0;
+    document.getElementById("dislike").innerText = 0;
+    document.getElementById("comments").innerHTML = "";
+}
+
+// helper
+function getCookie(name) {
+    let c = document.cookie.split("; ");
+    for (let i = 0; i < c.length; i++) {
+        let parts = c[i].split("=");
+        if (parts[0] == name) return parts[1];
+    }
+    return "";
+}
+
+</script>
+
+</body>
+</html>
