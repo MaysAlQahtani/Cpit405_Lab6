@@ -3,35 +3,73 @@
 <head>
 <meta charset="UTF-8">
 <title>Lab 6</title>
+
+<style>
+body {
+    font-family: Arial;
+    text-align: center;
+    margin-top: 100px;
+}
+
+h2 {
+    font-size: 40px;
+}
+
+.btn {
+    background-color: #eee;
+    border: none;
+    padding: 15px 25px;
+    font-size: 20px;
+    border-radius: 10px;
+    margin: 10px;
+    cursor: pointer;
+}
+
+.count {
+    font-size: 25px;
+    margin-left: 10px;
+}
+
+textarea {
+    width: 300px;
+    height: 100px;
+    margin-top: 20px;
+    font-size: 16px;
+}
+
+.smallBtn {
+    padding: 10px 20px;
+    margin: 10px;
+    font-size: 16px;
+}
+</style>
+
 </head>
 <body>
 
 <h2>Like or Dislike</h2>
 
-<button onclick="like()">👍</button>
-<span id="like">0</span>
+<button class="btn" onclick="like()">👍 <span id="like" class="count">0</span></button>
 
-<button onclick="dislike()">👎</button>
-<span id="dislike">0</span>
+<button class="btn" onclick="dislike()">👎 <span id="dislike" class="count">0</span></button>
 
-<br><br>
+<br>
 
 <textarea id="comment" placeholder="Write comment"></textarea><br>
-<button onclick="addComment()">Submit</button>
+
+<button class="smallBtn" onclick="addComment()">Submit</button>
 
 <div id="comments"></div>
 
 <br>
-<button onclick="resetAll()">Reset</button>
+<button class="smallBtn" onclick="resetAll()">Reset</button>
 
 <script>
 
-// counters
 let likeCount = 0;
 let dislikeCount = 0;
 let comments = [];
 
-// load from cookies
 if (document.cookie.includes("like=")) {
     likeCount = Number(getCookie("like"));
     document.getElementById("like").innerText = likeCount;
@@ -47,7 +85,6 @@ if (document.cookie.includes("comments=")) {
     showComments();
 }
 
-// like
 function like() {
     if (getCookie("voted")) {
         alert("You already voted");
@@ -61,7 +98,6 @@ function like() {
     document.cookie = "voted=yes";
 }
 
-// dislike
 function dislike() {
     if (getCookie("voted")) {
         alert("You already voted");
@@ -75,7 +111,6 @@ function dislike() {
     document.cookie = "voted=yes";
 }
 
-// add comment
 function addComment() {
     if (getCookie("commented")) {
         alert("You already commented");
@@ -91,9 +126,9 @@ function addComment() {
     document.cookie = "commented=yes";
 
     showComments();
+    document.getElementById("comment").value = "";
 }
 
-// show comments
 function showComments() {
     let div = document.getElementById("comments");
     div.innerHTML = "";
@@ -103,7 +138,6 @@ function showComments() {
     }
 }
 
-// reset
 function resetAll() {
     document.cookie = "like=0";
     document.cookie = "dislike=0";
@@ -120,7 +154,7 @@ function resetAll() {
     document.getElementById("comments").innerHTML = "";
 }
 
-// helper
+
 function getCookie(name) {
     let c = document.cookie.split("; ");
     for (let i = 0; i < c.length; i++) {
